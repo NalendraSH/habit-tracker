@@ -1,3 +1,3 @@
 # habit-tracker
 
-Apps untuk mencatat aktifitas sang anak.
+Apps untuk mencatat aktivitas sang anak.
