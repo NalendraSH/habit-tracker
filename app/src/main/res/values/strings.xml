@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">HabitTracker</string>
+
+    <string name="register_level_content">Tentukan berapa bintang yang harus dikumpulkan agar dapat mencapai level tertentu</string>
+    <string name="habit_delete_alert_content">
+        Apakah anda yakin ingin menghapus aktivitas ini? Semua data dari aktivitas ini akan hilang.
+    </string>
+    <string name="habit_delete_alert_title">Peringatan!</string>
+</resources>

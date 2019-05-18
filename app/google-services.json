@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "783411655283",
+    "firebase_url": "https://habittracker-bc91a.firebaseio.com",
+    "project_id": "habittracker-bc91a",
+    "storage_bucket": "habittracker-bc91a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783411655283:android:21221e8126da392c",
+        "android_client_info": {
+          "package_name": "com.habittracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783411655283-8nctqsva06s46s26j8kvsvdm9g0drljh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.habittracker",
+            "certificate_hash": "5fc4c3d0d533c156029a95ec4dbf1ab277554596"
+          }
+        },
+        {
+          "client_id": "783411655283-8cnctdlnsni3sopveujvcb6kf18hh6pv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpUIRibYjZUzingmP4PoLz9AZSw2QaXxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783411655283-8cnctdlnsni3sopveujvcb6kf18hh6pv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

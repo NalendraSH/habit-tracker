@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.home.HomeActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint_home_bio"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progress_home_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/ProgressHome"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraint_home_bio_inner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_home_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_settings"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/image_home_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="14dp"
+                android:src="@drawable/ic_add"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/image_home_settings"/>
+
+            <ImageView
+                android:id="@+id/image_home_redeem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="14dp"
+                android:src="@drawable/ic_reward"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/image_home_add"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_home_avatar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/img_avatar_level_1"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="2dp"
+                app:layout_constraintWidth_percent="0.316"
+                app:layout_constraintHeight_percent="0.581"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/textview_home_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:layout_marginStart="42dp"
+                android:text="Level 1"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_semibold"
+                app:layout_constraintTop_toBottomOf="@id/image_home_avatar"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/textview_home_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginStart="20dp"
+                android:text="Nalendra Setyo Hari"
+                android:textSize="20dp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_bold"
+                app:layout_constraintTop_toBottomOf="@id/image_home_settings"
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"/>
+
+            <ImageView
+                android:id="@+id/image_home_coins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_coins_white"
+                app:layout_constraintTop_toBottomOf="@id/textview_home_name"
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:text="Reward"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_regular"
+                app:layout_constraintTop_toBottomOf="@id/textview_home_name"
+                app:layout_constraintStart_toEndOf="@id/image_home_coins"/>
+
+            <TextView
+                android:id="@+id/textview_home_reward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="64dp"
+                android:text="60000"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_regular"
+                app:layout_constraintTop_toBottomOf="@id/textview_home_name"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/image_home_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_coin_white"
+                app:layout_constraintTop_toBottomOf="@id/image_home_coins"
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:text="Coin"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_regular"
+                app:layout_constraintTop_toBottomOf="@id/image_home_coins"
+                app:layout_constraintStart_toEndOf="@id/image_home_coin"/>
+
+            <TextView
+                android:id="@+id/textview_home_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="64dp"
+                android:text="30"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_regular"
+                app:layout_constraintTop_toBottomOf="@id/textview_home_reward"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ProgressBar
+                android:id="@+id/progress_home_star"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="18dp"
+                android:progress="12"
+                android:max="15"
+                android:progressDrawable="@drawable/progress_level"
+                style="?android:attr/progressBarStyleHorizontal"
+                app:layout_constraintTop_toBottomOf="@id/image_home_coin"
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_star_white"
+                app:layout_constraintTop_toBottomOf="@id/progress_home_star"
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"/>
+
+            <TextView
+                android:id="@+id/textview_home_points_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="18dp"
+                android:text="12/15"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitosans_semibold"
+                app:layout_constraintTop_toBottomOf="@id/progress_home_star"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+    
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/AppTabTextAppearance"
+        app:layout_constraintTop_toBottomOf="@id/constraint_home_bio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/AppTabLayout">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_home_habit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Habit" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_home_entertainment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hadiah" />
+
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_container_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tabs_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.constraint.ConstraintLayout>
