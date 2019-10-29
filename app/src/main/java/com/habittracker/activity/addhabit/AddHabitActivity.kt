@@ -1,8 +1,8 @@
 package com.habittracker.activity.addhabit
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.habittracker.R
@@ -11,7 +11,6 @@ import com.habittracker.model.Entertainment
 import com.habittracker.model.Habit
 import kotlinx.android.synthetic.main.activity_add_habit.*
 import org.jetbrains.anko.longToast
-import org.jetbrains.anko.toast
 
 class AddHabitActivity : AppCompatActivity() {
 
@@ -58,7 +57,7 @@ class AddHabitActivity : AppCompatActivity() {
         if (intent.getStringExtra("from") == "update"){
             id = intent.getStringExtra("id")
         }else {
-            id = databaseReference.child("anak").child(PreferenceHelper(this).userId).child(path).push().key
+            id = databaseReference.child(PreferenceHelper(this).userName).child(PreferenceHelper(this).userId).child(path).push().key
         }
 
         if (intent.getStringExtra("type") == "habit"){
@@ -75,7 +74,7 @@ class AddHabitActivity : AppCompatActivity() {
 
         progress_add_habit.visibility = View.VISIBLE
         button_add_habit_simpan.visibility = View.GONE
-        databaseReference.child("anak")
+        databaseReference.child(PreferenceHelper(this).userName)
             .child(PreferenceHelper(this).userId)
             .child(path)
             .child(id.toString())

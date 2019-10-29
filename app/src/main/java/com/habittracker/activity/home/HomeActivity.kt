@@ -1,37 +1,40 @@
 package com.habittracker.activity.home
 
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v7.app.AlertDialog
-import android.text.InputType
 import android.view.View
-import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.habittracker.R
 import com.habittracker.activity.addhabit.AddHabitActivity
+import com.habittracker.activity.addpunishment.AddPunishmentActivity
+import com.habittracker.activity.login.LoginActivity
 import com.habittracker.activity.registerbio.RegisterBioActivity
 import com.habittracker.fragment.entertainment.EntertainmentFragment
 import com.habittracker.fragment.habit.HabitFragment
+import com.habittracker.fragment.punishment.PunishmentFragment
 import com.habittracker.library.PreferenceHelper
 import com.habittracker.model.Child
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.dialog_redeem_reward.*
 import kotlinx.android.synthetic.main.dialog_redeem_reward.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.longToast
-import org.jetbrains.anko.toast
 
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,21 +43,36 @@ class HomeActivity : AppCompatActivity() {
         setViewPager()
 
         databaseReference = FirebaseDatabase.getInstance().reference
-        initData()
+
+        if (intent.getStringExtra("userid_data") != null) {
+            initData(intent.getStringExtra("userid_data"))
+        }else {
+            initData(PreferenceHelper(this).userId)
+        }
 
         image_home_add.setOnClickListener {
-            val listItems = arrayOf("Habit", "Entertainment")
+            val listItems = arrayOf("Habit", "Entertainment", "Punishment", "Child")
             val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setItems(listItems) { dialogInterface, i ->
                 val intent = Intent(this, AddHabitActivity::class.java)
                 if (listItems[i] == "Habit"){
                     intent.putExtra("from", "insert")
                     intent.putExtra("type", "habit")
-                }else {
+                    startActivity(intent)
+                }else if (listItems[i] == "Entertainment") {
                     intent.putExtra("from", "insert")
                     intent.putExtra("type", "entertainment")
+                    startActivity(intent)
+                }else if (listItems[i] == "Punishment") {
+                    val intent = Intent(this, AddPunishmentActivity::class.java)
+                    intent.putExtra("from", "insert")
+                    intent.putExtra("type", "punishment")
+                    startActivity(intent)
+                }else {
+                    val intent = Intent(this, RegisterBioActivity::class.java)
+                    intent.putExtra("addchild_status", "add")
+                    startActivity(intent)
                 }
-                startActivity(intent)
                 dialogInterface.dismiss()
             }.show()
         }
@@ -68,14 +86,14 @@ class HomeActivity : AppCompatActivity() {
                     val dialogView = layoutInflater.inflate(R.layout.dialog_redeem_reward, null)
                     builder.setView(dialogView)
                     builder.setPositiveButton("Ok") { _, _ ->
-                        databaseReference.child("anak")
+                        databaseReference.child(PreferenceHelper(this).userName)
                             .child(PreferenceHelper(this).userId)
                             .addListenerForSingleValueEvent(object : ValueEventListener{
                                 override fun onCancelled(p0: DatabaseError) {
                                 }
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                                     val child = dataSnapshot.getValue(Child::class.java)
-                                    databaseReference.child("anak")
+                                    databaseReference.child(PreferenceHelper(this@HomeActivity).userName)
                                         .child(PreferenceHelper(this@HomeActivity).userId)
                                         .child("totalrewards")
                                         .setValue(child?.totalrewards?.minus(dialogView.edittext_dialog_redeem.text.toString().toInt()))
@@ -89,7 +107,7 @@ class HomeActivity : AppCompatActivity() {
                     alertDialog.setTitle("Masukkan nominal")
                     alertDialog.show()
                 }else {
-                    databaseReference.child("anak")
+                    databaseReference.child(PreferenceHelper(this).userName)
                         .child(PreferenceHelper(this).userId)
                         .addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError) {
@@ -103,7 +121,7 @@ class HomeActivity : AppCompatActivity() {
                                 }else {
                                     alert("Apakah anda yakin ingin menukar coin dengan mainan?"){
                                         positiveButton("Ya"){
-                                            databaseReference.child("anak")
+                                            databaseReference.child(PreferenceHelper(this@HomeActivity).userName)
                                                 .child(PreferenceHelper(this@HomeActivity).userId)
                                                 .child("coins")
                                                 .setValue(child.coins.minus(15))
@@ -122,14 +140,65 @@ class HomeActivity : AppCompatActivity() {
         }
 
         image_home_settings.setOnClickListener {
-            startActivity(Intent(this, RegisterBioActivity::class.java))
+            val intent = Intent(this, RegisterBioActivity::class.java)
+            intent.putExtra("addchild_status", "setting")
+            startActivity(intent)
+        }
+
+        val context: Context = this
+
+        image_home_switch.setOnClickListener {
+            databaseReference.child(PreferenceHelper(context).userName)
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val listItems = ArrayList<String>()
+                        val listId = ArrayList<String>()
+                        for (noteDataSnapshot in dataSnapshot.children){
+                            val child = noteDataSnapshot.getValue(Child::class.java)
+
+                            child?.name?.let { it1 -> listItems.add(it1) }
+                            child?.id?.let { it1 -> listId.add(it1) }
+                        }
+                        val list = listItems.toArray(arrayOfNulls<String>(listItems.size))
+                        val dialogBuilder = AlertDialog.Builder(context)
+                        dialogBuilder.setItems(list) { dialogInterface, i ->
+                            initData(listId[i])
+                            PreferenceHelper(context).userId = listId[i]
+                            sendBroadcast(Intent("CHANGE"))
+                            dialogInterface.dismiss()
+                        }.show()
+                    }
+                })
+        }
+
+        image_home_logout.setOnClickListener {
+            alert("Apakah anda yakin ingin melogout data anda dari device ini?", "Logout") {
+                positiveButton("Ok"){
+                    PreferenceHelper(this@HomeActivity).clearData()
+                    FirebaseAuth.getInstance().signOut()
+
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build()
+                    mGoogleSignInClient = GoogleSignIn.getClient(this@HomeActivity,gso)
+                    mGoogleSignInClient.signOut().addOnCompleteListener {
+                        startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
+                        finish()
+                    }
+                }
+                negativeButton("Cancel"){}
+            }.show()
         }
     }
 
-    private fun initData() {
+    private fun initData(userId: String) {
         progress_home_loading.visibility = View.VISIBLE
         constraint_home_bio_inner.visibility = View.GONE
-        databaseReference.child("anak").child(PreferenceHelper(this).userId).addValueEventListener(object : ValueEventListener{
+        databaseReference.child(PreferenceHelper(this).userName).child(userId).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 progress_home_loading.visibility = View.GONE
                 constraint_home_bio_inner.visibility = View.VISIBLE
@@ -142,7 +211,7 @@ class HomeActivity : AppCompatActivity() {
                 textview_home_reward.text = child?.totalrewards.toString()
 //                val totalReward = child?.reward?.times(child.points!!)
 //                textview_home_reward.text = totalReward.toString()
-//                databaseReference.child("anak")
+//                databaseReference.child(PreferenceHelper(context!!).userName)
 //                    .child(PreferenceHelper(this@HomeActivity).userId)
 //                    .child("totalrewards")
 //                    .setValue(totalReward)
@@ -201,16 +270,18 @@ class HomeActivity : AppCompatActivity() {
 
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment? {
-            return when (position) {
-                0 -> { HabitFragment() }
-                1 -> { EntertainmentFragment() }
-                else -> null
+        override fun getItem(position: Int): Fragment {
+            var fragment: Fragment = HabitFragment()
+            when (position) {
+                0 -> { fragment = HabitFragment() }
+                1 -> { fragment = EntertainmentFragment() }
+                2 -> { fragment = PunishmentFragment() }
             }
+            return fragment
         }
 
         override fun getCount(): Int {
-            return 2
+            return 3
         }
     }
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.home.HomeActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_home_bio"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -28,20 +28,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_home_bio_inner"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_home_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_logout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/image_home_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginEnd="14dp"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toStartOf="@id/image_home_logout"/>
 
             <ImageView
                 android:id="@+id/image_home_add"
@@ -92,16 +102,20 @@
 
             <TextView
                 android:id="@+id/textview_home_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="18dp"
                 android:text="Nalendra Setyo Hari"
                 android:textSize="20dp"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/nunitosans_bold"
+                android:maxLines="1"
+                android:ellipsize="end"
                 app:layout_constraintTop_toBottomOf="@id/image_home_settings"
-                app:layout_constraintStart_toEndOf="@id/image_home_avatar"/>
+                app:layout_constraintStart_toEndOf="@id/image_home_avatar"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/image_home_coins"
@@ -130,13 +144,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="20dp"
                 android:text="60000"
                 android:textSize="14sp"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/nunitosans_regular"
                 app:layout_constraintTop_toBottomOf="@id/textview_home_name"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toStartOf="@id/image_home_switch"/>
 
             <ImageView
                 android:id="@+id/image_home_coin"
@@ -165,12 +179,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="20dp"
                 android:text="30"
                 android:textSize="14sp"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/nunitosans_regular"
                 app:layout_constraintTop_toBottomOf="@id/textview_home_reward"
+                app:layout_constraintEnd_toStartOf="@id/image_home_switch"/>
+
+            <ImageView
+                android:id="@+id/image_home_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_switch"
+                app:layout_constraintTop_toBottomOf="@id/textview_home_name"
+                app:layout_constraintBottom_toTopOf="@id/progress_home_star"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <ProgressBar
@@ -210,11 +234,11 @@
                 app:layout_constraintTop_toBottomOf="@id/progress_home_star"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -224,21 +248,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/AppTabLayout">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_home_habit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Habit" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_home_entertainment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hadiah" />
+            android:text="Entertainment" />
 
-    </android.support.design.widget.TabLayout>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_home_punishment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Punishment" />
 
-    <android.support.v4.view.ViewPager
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager_container_home"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -248,4 +278,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

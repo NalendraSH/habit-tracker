@@ -1,34 +1,50 @@
-package com.habittracker.fragment.entertainment
-
+package com.habittracker.fragment.punishment
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.habittracker.R
 import com.habittracker.library.PreferenceHelper
-import com.habittracker.model.Entertainment
-import kotlinx.android.synthetic.main.fragment_entertainment.view.*
+import com.habittracker.model.Punishment
+import kotlinx.android.synthetic.main.fragment_punishment.*
+import kotlinx.android.synthetic.main.fragment_punishment.view.*
 
-class EntertainmentFragment : Fragment() {
+/**
+ * A simple [Fragment] subclass.
+ */
+class PunishmentFragment : Fragment() {
 
-    private lateinit var databaseReference: DatabaseReference
-    private val listEntertainment: MutableList<Entertainment> = mutableListOf()
-    private val adapter = EntertainmentAdapter(listEntertainment)
+    companion object {
+        private const val START_TIME_IN_MILLIS: Long = 600000
+    }
+
+    private var mCountDownTimer: CountDownTimer? = null
+
+    private var mTimerRunning: Boolean = false
+
+    private var mTimeLeftInMillis: Long = 0
+    private var mEndTime: Long = 0
+
     private lateinit var v: View
+    private lateinit var databaseReference: DatabaseReference
+    private val listHabit: MutableList<Punishment> = mutableListOf()
+    private val adapter = PunishmentAdapter(listHabit)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_entertainment, container, false)
+        v = inflater.inflate(R.layout.fragment_punishment, container, false)
 
         databaseReference = FirebaseDatabase.getInstance().reference
         initData(PreferenceHelper(context!!).userId)
@@ -53,32 +69,38 @@ class EntertainmentFragment : Fragment() {
     }
 
     private fun initData(userId: String) {
-        v.progress_entertainment.visibility = View.VISIBLE
-        v.recycler_entertainment.visibility = View.GONE
+        v.progress_punishment.visibility = View.VISIBLE
+        v.progress_punishment.visibility = View.GONE
         databaseReference.child(PreferenceHelper(context!!).userName)
             .child(userId)
-            .child("entertainment")
+            .child("punishment")
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
-                    v.progress_entertainment.visibility = View.GONE
-                    v.recycler_entertainment.visibility = View.VISIBLE
+                    v.progress_punishment.visibility = View.GONE
+                    v.progress_punishment.visibility = View.VISIBLE
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    listEntertainment.clear()
+                    listHabit.clear()
                     for (noteDataSnapshot in dataSnapshot.children){
-                        val habit = noteDataSnapshot.getValue(Entertainment::class.java)
+                        val habit = noteDataSnapshot.getValue(Punishment::class.java)
 
-                        listEntertainment.add(habit!!)
+                        listHabit.add(habit!!)
                     }
-                    v.recycler_entertainment.adapter = adapter
-                    v.recycler_entertainment.layoutManager =
-                        androidx.recyclerview.widget.LinearLayoutManager(context)
+                    v.recycler_punishment.adapter = adapter
+                    v.recycler_punishment.layoutManager = LinearLayoutManager(context)
 
-                    v.progress_entertainment.visibility = View.GONE
-                    v.recycler_entertainment.visibility = View.VISIBLE
+                    v.progress_punishment.visibility = View.GONE
+                    v.recycler_punishment.visibility = View.VISIBLE
                 }
 
             })
     }
+
+    override fun onStop() {
+        super.onStop()
+
+        recycler_punishment.adapter = null
+    }
+
 }

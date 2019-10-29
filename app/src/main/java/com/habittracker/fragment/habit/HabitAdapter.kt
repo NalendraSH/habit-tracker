@@ -2,27 +2,23 @@ package com.habittracker.fragment.habit
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.habittracker.R
+import com.habittracker.activity.addhabit.AddHabitActivity
 import com.habittracker.library.PreferenceHelper
 import com.habittracker.model.Child
 import com.habittracker.model.Habit
 import kotlinx.android.synthetic.main.item_habit.view.*
-import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
-import com.habittracker.activity.addhabit.AddHabitActivity
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
-
-
 
 class HabitAdapter(private val habit: MutableList<Habit> = mutableListOf()):
         RecyclerView.Adapter<HabitAdapter.ViewHolder>(){
@@ -56,7 +52,7 @@ class HabitAdapter(private val habit: MutableList<Habit> = mutableListOf()):
                     context.alert(R.string.habit_delete_alert_content, R.string.habit_delete_alert_title){
                         positiveButton("Ok"){
                             //delete data
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("habit")
                                 .child(habit[position].id!!)
@@ -80,7 +76,7 @@ class HabitAdapter(private val habit: MutableList<Habit> = mutableListOf()):
             itemView.button_habit_substract.background = context.resources.getDrawable(R.drawable.shape_left_corner_filled)
             itemView.button_habit_add.background = context.resources.getDrawable(R.drawable.shape_right_corner_filled)
 
-            databaseReference.child("anak")
+            databaseReference.child(PreferenceHelper(context).userName)
                 .child(PreferenceHelper(context).userId)
                 .addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
@@ -90,12 +86,12 @@ class HabitAdapter(private val habit: MutableList<Habit> = mutableListOf()):
                         val child = dataSnapshot.getValue(Child::class.java)
 
                         itemView.button_habit_add.setOnClickListener {
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("points")
                                 .setValue(child?.points?.plus(items.point_plus!!))
 
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("totalrewards")
                                 .setValue(child?.totalrewards?.plus(items.point_plus?.times(child.reward!!)!!))
@@ -104,12 +100,12 @@ class HabitAdapter(private val habit: MutableList<Habit> = mutableListOf()):
                         }
 
                         itemView.button_habit_substract.setOnClickListener {
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("points")
                                 .setValue(child?.points?.minus(items.point_plus!!))
 
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("totalrewards")
                                 .setValue(child?.totalrewards?.minus(items.point_minus?.times(child.reward!!)!!))

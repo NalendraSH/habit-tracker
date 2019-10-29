@@ -2,29 +2,25 @@ package com.habittracker.fragment.entertainment
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.habittracker.R
+import com.habittracker.activity.addhabit.AddHabitActivity
 import com.habittracker.library.PreferenceHelper
 import com.habittracker.model.Child
-import com.habittracker.model.Habit
-import kotlinx.android.synthetic.main.item_habit.view.*
-import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
-import com.habittracker.activity.addhabit.AddHabitActivity
 import com.habittracker.model.Entertainment
+import kotlinx.android.synthetic.main.item_habit.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
 
 class EntertainmentAdapter(private val entertainment: MutableList<Entertainment> = mutableListOf()):
-        RecyclerView.Adapter<EntertainmentAdapter.ViewHolder>(){
+        androidx.recyclerview.widget.RecyclerView.Adapter<EntertainmentAdapter.ViewHolder>(){
 
     private lateinit var context: Context
 
@@ -54,7 +50,7 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                 }else {
                     context.alert(R.string.habit_delete_alert_content, R.string.habit_delete_alert_title){
                         positiveButton("Ok"){
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("entertainment")
                                 .child(entertainment[position].id!!)
@@ -69,7 +65,7 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
         }
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         private val databaseReference = FirebaseDatabase.getInstance().reference
 
         fun bindView(items: Entertainment, context: Context){
@@ -78,7 +74,7 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
             itemView.button_habit_substract.background = context.resources.getDrawable(R.drawable.shape_left_corner_filled)
             itemView.button_habit_add.background = context.resources.getDrawable(R.drawable.shape_right_corner_filled)
 
-            databaseReference.child("anak")
+            databaseReference.child(PreferenceHelper(context).userName)
                 .child(PreferenceHelper(context).userId)
                 .addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
@@ -88,7 +84,7 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                         val child = dataSnapshot.getValue(Child::class.java)
 
                         itemView.button_habit_add.setOnClickListener {
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("coins")
                                 .setValue(child?.coins?.plus(items.coin_plus!!))
@@ -97,7 +93,7 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                         }
 
                         itemView.button_habit_substract.setOnClickListener {
-                            databaseReference.child("anak")
+                            databaseReference.child(PreferenceHelper(context).userName)
                                 .child(PreferenceHelper(context).userId)
                                 .child("coins")
                                 .setValue(child?.coins?.minus(items.coin_plus!!))

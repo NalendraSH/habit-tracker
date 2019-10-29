@@ -2,11 +2,10 @@ package com.habittracker.activity.registerbio
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.habittracker.R
 import com.habittracker.activity.registerlevel.RegisterLevelActivity
@@ -29,8 +28,8 @@ class RegisterBioActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
-        if (PreferenceHelper(this).userId != ""){
-            databaseReference.child("anak")
+        if (PreferenceHelper(this).userId != "" && intent.getStringExtra("addchild_status") == "setting"){
+            databaseReference.child(PreferenceHelper(this).userName)
                 .child(PreferenceHelper(this).userId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
@@ -45,12 +44,14 @@ class RegisterBioActivity : AppCompatActivity() {
                         }else {
                             radiogroup_register_jenis_kelamin.check(R.id.radiobutton_register_perempuan)
                         }
-                        imageview_register_logo.visibility = View.GONE
-                        toolbar_register_bio.visibility = View.VISIBLE
+                        textview_register_bio_title.text = "Setting"
                         toolbar_register_bio.setNavigationIcon(R.drawable.ic_navigate_back)
                         toolbar_register_bio.setNavigationOnClickListener { finish() }
                     }
                 })
+        }else if (PreferenceHelper(this).userId != "" && intent.getStringExtra("addchild_status") == "add") {
+            toolbar_register_bio.setNavigationIcon(R.drawable.ic_navigate_back)
+            toolbar_register_bio.setNavigationOnClickListener { finish() }
         }
 
         edittext_register_tanggal_lahir.setOnClickListener {
@@ -62,13 +63,14 @@ class RegisterBioActivity : AppCompatActivity() {
             false
         }
 
-        val jenisKelamin = findViewById<RadioButton>(radiogroup_register_jenis_kelamin.checkedRadioButtonId)
         button_register_lanjutkan.setOnClickListener {
+            val jenisKelamin = findViewById<RadioButton>(radiogroup_register_jenis_kelamin.checkedRadioButtonId)
             startActivity(intentFor<RegisterLevelActivity>(
                 "nama_lengkap" to edittext_register_nama_lengkap.text.toString(),
                 "tgl_lahir" to edittext_register_tanggal_lahir.text.toString(),
                 "reward" to edittext_register_reward.text.toString(),
-                "jenis_kelamin" to jenisKelamin.text.toString()
+                "jenis_kelamin" to jenisKelamin.text.toString(),
+                "addchild_status" to intent.getStringExtra("addchild_status")
             ))
         }
     }

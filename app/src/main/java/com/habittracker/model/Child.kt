@@ -1,6 +1,7 @@
 package com.habittracker.model
 
-data class Child(val name: String? = "",
+data class Child(val id: String? = "",
+                 val name: String? = "",
                  val date_of_birth: String? = "",
                  val reward: Int? = 0,
                  val totalrewards: Int? = 0,

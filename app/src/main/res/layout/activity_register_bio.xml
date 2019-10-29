@@ -8,12 +8,11 @@
     android:background="#FFFFFF"
     tools:context=".activity.registerbio.RegisterBioActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
-            android:visibility="gone"
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_register_bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,39 +22,28 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
+                android:id="@+id/textview_register_bio_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Setting"
+                android:text="Add New Child"
                 android:textSize="18sp"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/nunitosans_regular"
                 android:layout_gravity="center"/>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
-        <ImageView
-            android:id="@+id/imageview_register_logo"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="90dp"
-            android:layout_marginEnd="90dp"
-            android:src="@drawable/img_logo_register"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_register_bio"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinput_register_nama_lengkap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:hint="Nama Lengkap"
             android:textColorHint="@color/colorPrimary"
             app:hintTextAppearance="@style/TextInputLayoutCustom"
-            app:layout_constraintTop_toBottomOf="@+id/imageview_register_logo"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_register_bio"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -71,9 +59,9 @@
                 android:drawablePadding="2dp"
                 app:backgroundTint="@color/colorPrimary"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinput_register_tanggal_lahir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,9 +87,9 @@
                 android:drawablePadding="5dp"
                 app:backgroundTint="@color/colorPrimary"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinput_register_reward"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,9 +114,9 @@
                 android:drawablePadding="5dp"
                 app:backgroundTint="@color/colorPrimary"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_register_jenis_kelamin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -177,7 +165,7 @@
 
             </RadioGroup>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/button_register_lanjutkan"
@@ -196,6 +184,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
