@@ -35,6 +35,8 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var databaseReference: DatabaseReference
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private val userId: String by lazy { PreferenceHelper(this).userId!! }
+    private val userName: String by lazy { PreferenceHelper(this).userName!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,7 @@ class HomeActivity : AppCompatActivity() {
         if (intent.getStringExtra("userid_data") != null) {
             initData(intent.getStringExtra("userid_data"))
         }else {
-            initData(PreferenceHelper(this).userId)
+            initData(userId)
         }
 
         image_home_add.setOnClickListener {
@@ -64,14 +66,14 @@ class HomeActivity : AppCompatActivity() {
                     intent.putExtra("type", "entertainment")
                     startActivity(intent)
                 }else if (listItems[i] == "Punishment") {
-                    val intent = Intent(this, AddPunishmentActivity::class.java)
-                    intent.putExtra("from", "insert")
-                    intent.putExtra("type", "punishment")
-                    startActivity(intent)
+                    val addPunishmentIntent = Intent(this, AddPunishmentActivity::class.java)
+                    addPunishmentIntent.putExtra("from", "insert")
+                    addPunishmentIntent.putExtra("type", "punishment")
+                    startActivity(addPunishmentIntent)
                 }else {
-                    val intent = Intent(this, RegisterBioActivity::class.java)
-                    intent.putExtra("addchild_status", "add")
-                    startActivity(intent)
+                    val registerBioIntent = Intent(this, RegisterBioActivity::class.java)
+                    registerBioIntent.putExtra("addchild_status", "add")
+                    startActivity(registerBioIntent)
                 }
                 dialogInterface.dismiss()
             }.show()
@@ -86,15 +88,15 @@ class HomeActivity : AppCompatActivity() {
                     val dialogView = layoutInflater.inflate(R.layout.dialog_redeem_reward, null)
                     builder.setView(dialogView)
                     builder.setPositiveButton("Ok") { _, _ ->
-                        databaseReference.child(PreferenceHelper(this).userName)
-                            .child(PreferenceHelper(this).userId)
+                        databaseReference.child(userName)
+                            .child(userId)
                             .addListenerForSingleValueEvent(object : ValueEventListener{
                                 override fun onCancelled(p0: DatabaseError) {
                                 }
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                                     val child = dataSnapshot.getValue(Child::class.java)
-                                    databaseReference.child(PreferenceHelper(this@HomeActivity).userName)
-                                        .child(PreferenceHelper(this@HomeActivity).userId)
+                                    databaseReference.child(userName)
+                                        .child(userId)
                                         .child("totalrewards")
                                         .setValue(child?.totalrewards?.minus(dialogView.edittext_dialog_redeem.text.toString().toInt()))
                                 }
@@ -107,8 +109,8 @@ class HomeActivity : AppCompatActivity() {
                     alertDialog.setTitle("Masukkan nominal")
                     alertDialog.show()
                 }else {
-                    databaseReference.child(PreferenceHelper(this).userName)
-                        .child(PreferenceHelper(this).userId)
+                    databaseReference.child(userName)
+                        .child(userId)
                         .addListenerForSingleValueEvent(object : ValueEventListener{
                             override fun onCancelled(p0: DatabaseError) {
                             }
@@ -121,8 +123,8 @@ class HomeActivity : AppCompatActivity() {
                                 }else {
                                     alert("Apakah anda yakin ingin menukar coin dengan mainan?"){
                                         positiveButton("Ya"){
-                                            databaseReference.child(PreferenceHelper(this@HomeActivity).userName)
-                                                .child(PreferenceHelper(this@HomeActivity).userId)
+                                            databaseReference.child(userName)
+                                                .child(userId)
                                                 .child("coins")
                                                 .setValue(child.coins.minus(15))
                                             longToast("Berhasil menukarkan dengan hadiah")
@@ -148,7 +150,7 @@ class HomeActivity : AppCompatActivity() {
         val context: Context = this
 
         image_home_switch.setOnClickListener {
-            databaseReference.child(PreferenceHelper(context).userName)
+            databaseReference.child(userName)
                 .addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
                     }
@@ -198,7 +200,7 @@ class HomeActivity : AppCompatActivity() {
     private fun initData(userId: String) {
         progress_home_loading.visibility = View.VISIBLE
         constraint_home_bio_inner.visibility = View.GONE
-        databaseReference.child(PreferenceHelper(this).userName).child(userId).addValueEventListener(object : ValueEventListener{
+        databaseReference.child(userName).child(userId).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 progress_home_loading.visibility = View.GONE
                 constraint_home_bio_inner.visibility = View.VISIBLE

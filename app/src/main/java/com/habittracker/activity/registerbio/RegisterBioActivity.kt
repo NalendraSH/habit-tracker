@@ -20,6 +20,8 @@ class RegisterBioActivity : AppCompatActivity() {
 
     private lateinit var databaseReference: DatabaseReference
     private var tglLahir = ""
+    private val userId: String by lazy { PreferenceHelper(this).userId!! }
+    private val userName: String by lazy { PreferenceHelper(this).userName!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +30,9 @@ class RegisterBioActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
-        if (PreferenceHelper(this).userId != "" && intent.getStringExtra("addchild_status") == "setting"){
-            databaseReference.child(PreferenceHelper(this).userName)
-                .child(PreferenceHelper(this).userId)
+        if (userId != "" && intent.getStringExtra("addchild_status") == "setting"){
+            databaseReference.child(userName)
+                .child(userId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
                     }
@@ -49,7 +51,7 @@ class RegisterBioActivity : AppCompatActivity() {
                         toolbar_register_bio.setNavigationOnClickListener { finish() }
                     }
                 })
-        }else if (PreferenceHelper(this).userId != "" && intent.getStringExtra("addchild_status") == "add") {
+        }else if (userId != "" && intent.getStringExtra("addchild_status") == "add") {
             toolbar_register_bio.setNavigationIcon(R.drawable.ic_navigate_back)
             toolbar_register_bio.setNavigationOnClickListener { finish() }
         }

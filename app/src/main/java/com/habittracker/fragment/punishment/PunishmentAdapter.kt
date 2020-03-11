@@ -22,6 +22,8 @@ class PunishmentAdapter(private val punishment: MutableList<Punishment> = mutabl
         RecyclerView.Adapter<PunishmentAdapter.ViewHolder>() {
 
     private lateinit var context: Context
+    private val userId: String by lazy { PreferenceHelper(context).userId!! }
+    private val userName: String by lazy { PreferenceHelper(context).userName!! }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -65,8 +67,8 @@ class PunishmentAdapter(private val punishment: MutableList<Punishment> = mutabl
                     context.alert(R.string.habit_delete_alert_content, R.string.habit_delete_alert_title){
                         positiveButton("Ok"){
                             //delete data
-                            databaseReference.child(PreferenceHelper(context).userName)
-                                .child(PreferenceHelper(context).userId)
+                            databaseReference.child(userName)
+                                .child(userId)
                                 .child("punishment")
                                 .child(punishment[position].id!!)
                                 .removeValue()

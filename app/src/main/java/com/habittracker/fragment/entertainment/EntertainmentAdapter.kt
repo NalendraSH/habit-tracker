@@ -23,6 +23,8 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
         androidx.recyclerview.widget.RecyclerView.Adapter<EntertainmentAdapter.ViewHolder>(){
 
     private lateinit var context: Context
+    private val userId: String by lazy { PreferenceHelper(context).userId!! }
+    private val userName: String by lazy { PreferenceHelper(context).userName!! }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -50,8 +52,8 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                 }else {
                     context.alert(R.string.habit_delete_alert_content, R.string.habit_delete_alert_title){
                         positiveButton("Ok"){
-                            databaseReference.child(PreferenceHelper(context).userName)
-                                .child(PreferenceHelper(context).userId)
+                            databaseReference.child(userName)
+                                .child(userId)
                                 .child("entertainment")
                                 .child(entertainment[position].id!!)
                                 .removeValue()
@@ -67,15 +69,19 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
 
     class ViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         private val databaseReference = FirebaseDatabase.getInstance().reference
+        private lateinit var context: Context
+        private val userId: String by lazy { PreferenceHelper(context).userId!! }
+        private val userName: String by lazy { PreferenceHelper(context).userName!! }
 
         fun bindView(items: Entertainment, context: Context){
+            this.context = context
             itemView.textview_habit_name.text = items.name
 
             itemView.button_habit_substract.background = context.resources.getDrawable(R.drawable.shape_left_corner_filled)
             itemView.button_habit_add.background = context.resources.getDrawable(R.drawable.shape_right_corner_filled)
 
-            databaseReference.child(PreferenceHelper(context).userName)
-                .child(PreferenceHelper(context).userId)
+            databaseReference.child(userName)
+                .child(userId)
                 .addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
                     }
@@ -84,8 +90,8 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                         val child = dataSnapshot.getValue(Child::class.java)
 
                         itemView.button_habit_add.setOnClickListener {
-                            databaseReference.child(PreferenceHelper(context).userName)
-                                .child(PreferenceHelper(context).userId)
+                            databaseReference.child(userName)
+                                .child(userId)
                                 .child("coins")
                                 .setValue(child?.coins?.plus(items.coin_plus!!))
 
@@ -93,8 +99,8 @@ class EntertainmentAdapter(private val entertainment: MutableList<Entertainment>
                         }
 
                         itemView.button_habit_substract.setOnClickListener {
-                            databaseReference.child(PreferenceHelper(context).userName)
-                                .child(PreferenceHelper(context).userId)
+                            databaseReference.child(userName)
+                                .child(userId)
                                 .child("coins")
                                 .setValue(child?.coins?.minus(items.coin_plus!!))
 

@@ -37,6 +37,8 @@ class LoginActivity : AppCompatActivity() {
     //Firebase Auth
     private lateinit var mAuth: FirebaseAuth
     private val databaseReference = FirebaseDatabase.getInstance().reference
+    private val userId: String by lazy { PreferenceHelper(this).userId!! }
+    private val userName: String by lazy { PreferenceHelper(this).userName!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (user.displayName?.let { dataSnapshot.hasChild(it) }!!){
-                        databaseReference.child(PreferenceHelper(this@LoginActivity).userName)
+                        databaseReference.child(userName)
                             .addListenerForSingleValueEvent(object : ValueEventListener{
                                 override fun onCancelled(p0: DatabaseError) {
                                 }

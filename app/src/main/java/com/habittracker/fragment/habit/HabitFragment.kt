@@ -22,6 +22,8 @@ class HabitFragment: Fragment() {
     private val listHabit: MutableList<Habit> = mutableListOf()
     private val adapter = HabitAdapter(listHabit)
     private lateinit var v: View
+    private val userId: String by lazy { context?.let { PreferenceHelper(it).userId }!! }
+    private val userName: String by lazy { context?.let { PreferenceHelper(it).userName }!! }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,14 +33,14 @@ class HabitFragment: Fragment() {
         v = inflater.inflate(R.layout.fragment_habit, container, false)
 
         databaseReference = FirebaseDatabase.getInstance().reference
-        initData(PreferenceHelper(context!!).userId)
+        initData(userId)
 
         return v
     }
 
     private val mNotificationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            context.let { PreferenceHelper(it).userId }?.let { initData(it) }
+            initData(userId)
         }
     }
 
@@ -55,7 +57,7 @@ class HabitFragment: Fragment() {
     private fun initData(userId: String) {
         v.progress_habit.visibility = View.VISIBLE
         v.recycler_habit.visibility = View.GONE
-        databaseReference.child(PreferenceHelper(context!!).userName)
+        databaseReference.child(userName)
             .child(userId)
             .child("habit")
             .addValueEventListener(object : ValueEventListener{

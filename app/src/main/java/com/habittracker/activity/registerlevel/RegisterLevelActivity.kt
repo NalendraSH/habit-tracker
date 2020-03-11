@@ -15,6 +15,8 @@ import org.jetbrains.anko.longToast
 class RegisterLevelActivity : AppCompatActivity() {
 
     private lateinit var databaseReference: DatabaseReference
+    private val userId: String by lazy { PreferenceHelper(this).userId!! }
+    private val userName: String by lazy { PreferenceHelper(this).userName!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +25,8 @@ class RegisterLevelActivity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().reference
 
         if (PreferenceHelper(this).userId != "" && intent.getStringExtra("addchild_status") == "setting"){
-            databaseReference.child(PreferenceHelper(this).userName)
-                .child(PreferenceHelper(this).userId)
+            databaseReference.child(userName)
+                .child(userId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
                     }
@@ -51,14 +53,14 @@ class RegisterLevelActivity : AppCompatActivity() {
     private fun saveData() {
         val id: String?
         if (PreferenceHelper(this).userId == "" || intent.getStringExtra("addchild_status") == "add"){
-            id = databaseReference.child(PreferenceHelper(this).userName).push().key
+            id = databaseReference.child(userName).push().key
         }else {
-            id = PreferenceHelper(this).userId
+            id = userId
         }
         progress_register_level.visibility = View.VISIBLE
         button_register_simpan.visibility = View.GONE
         if (intent.getStringExtra("addchild_status") == "add") {
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).setValue(
+            databaseReference.child(userName).child(id.toString()).setValue(
                 Child(
                     id,
                     intent.getStringExtra("nama_lengkap"),
@@ -90,23 +92,23 @@ class RegisterLevelActivity : AppCompatActivity() {
                 longToast("Register Failure. Please check your internet connection.")
             }
         }else {
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("name")
+            databaseReference.child(userName).child(id.toString()).child("name")
                 .setValue(intent.getStringExtra("nama_lengkap"))
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("date_of_birth")
+            databaseReference.child(userName).child(id.toString()).child("date_of_birth")
                 .setValue(intent.getStringExtra("tgl_lahir"))
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("reward")
+            databaseReference.child(userName).child(id.toString()).child("reward")
                 .setValue(intent.getStringExtra("reward").toInt())
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("gender")
+            databaseReference.child(userName).child(id.toString()).child("gender")
                 .setValue(intent.getStringExtra("jenis_kelamin"))
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("level1")
+            databaseReference.child(userName).child(id.toString()).child("level1")
                 .setValue(edittext_register_level_1.text.toString().toInt())
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("level2")
+            databaseReference.child(userName).child(id.toString()).child("level2")
                 .setValue(edittext_register_level_2.text.toString().toInt())
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("level3")
+            databaseReference.child(userName).child(id.toString()).child("level3")
                 .setValue(edittext_register_level_3.text.toString().toInt())
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("level4")
+            databaseReference.child(userName).child(id.toString()).child("level4")
                 .setValue(edittext_register_level_4.text.toString().toInt())
-            databaseReference.child(PreferenceHelper(this).userName).child(id.toString()).child("level5")
+            databaseReference.child(userName).child(id.toString()).child("level5")
                 .setValue(edittext_register_level_5.text.toString().toInt())
                 .addOnSuccessListener {
                     progress_register_level.visibility = View.GONE

@@ -17,6 +17,8 @@ class AddPunishmentActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var path: String
     private lateinit var value: Any
+    private val userId: String by lazy { PreferenceHelper(this).userId!! }
+    private val userName: String by lazy { PreferenceHelper(this).userName!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,7 @@ class AddPunishmentActivity : AppCompatActivity() {
         if (intent.getStringExtra("from") == "update"){
             id = intent.getStringExtra("id")
         }else {
-            id = databaseReference.child(PreferenceHelper(this).userName).child(PreferenceHelper(this).userId).child(path).push().key
+            id = databaseReference.child(userName).child(userId).child(path).push().key
         }
 
         val durationInMillis = spinner_add_punishment_minutes.selectedItem.toString().toLong() * 60000 +
@@ -58,8 +60,8 @@ class AddPunishmentActivity : AppCompatActivity() {
 
         progress_add_punishment.visibility = View.VISIBLE
         button_add_punishment_save.visibility = View.GONE
-        databaseReference.child(PreferenceHelper(this).userName)
-            .child(PreferenceHelper(this).userId)
+        databaseReference.child(userName)
+            .child(userId)
             .child(path)
             .child(id.toString())
             .setValue(value)
